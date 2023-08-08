@@ -1,0 +1,58 @@
+{
+    "name": "terminal-send",
+    "displayName": "Terminal Send",
+    "description": "A VS Code extension for sending blocks of text to the integrated terminal",
+    "version": "0.0.1",
+    "publisher": "sswatson",
+    "categories": [
+        "Other"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sswatson/vscode-terminal-send"
+    },
+    "main": "./out/extension.js",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "license": "MIT",
+    "contributes": {
+        "configuration": {
+            "properties": {
+                "terminalSend.isActive": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether Terminal Send is active"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "terminalSend.sendSelection",
+                "title": "Terminal Send: Send Selection to Terminal"
+            },
+            {
+                "command": "terminalSend.setTerminal",
+                "title": "Terminal Send: Set Terminal for Current Editor"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "terminalSend.sendSelection",
+                "key": "shift+enter",
+                "when": "config.terminalSend.isActive"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.60.0",
+        "@types/glob": "^7.1.3",
+        "typescript": "^4.4.3",
+        "vscode-test": "^1.6.2"
+    }
+}
