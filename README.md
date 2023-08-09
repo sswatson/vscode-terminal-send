@@ -13,4 +13,10 @@ Finally, select the command "Terminal Send: Send Selection to Terminal" from the
 
 ## Advanced Usage
 
+### Templates
+
+You can do "Terminal Send: Configure Template" to send boilerplate text along with the selected text each time you invoke "Terminal Send: Send Selection to Terminal". Use `{}` to indicate where the selected text should be inserted.
+
+### Editor-to-Terminal Assignment
+
 The extension associates each editor with a specific terminal, so that you send code from different editors to different terminals. If you want to change this assignment, you can use the command "Terminal Send: Set Terminal for Current Editor" from the command palette.

@@ -2,7 +2,8 @@
     "name": "terminal-send",
     "displayName": "Terminal Send",
     "description": "A VS Code extension for sending blocks of text to the integrated terminal",
-    "version": "0.0.1",
+    "version": "0.0.3",
+    "icon": "assets/icon.png",
     "publisher": "sswatson",
     "categories": [
         "Other"
@@ -23,6 +24,11 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Whether Terminal Send is active"
+                },
+                "terminalSend.template": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The Terminal Send template"
                 }
             }
         },
@@ -34,6 +40,10 @@
             {
                 "command": "terminalSend.setTerminal",
                 "title": "Terminal Send: Set Terminal for Current Editor"
+            },
+            {
+                "command": "terminalSend.configureTemplate",
+                "title": "Terminal Send: Configure Template"
             }
         ],
         "keybindings": [

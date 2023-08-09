@@ -35,6 +35,21 @@ let editorToTerminal = new EditorToTerminal();
 
 export function activate(context: vscode.ExtensionContext) {
   markExtensionActive(true);
+  
+  vscode.workspace
+    .getConfiguration()
+    .update(
+      "terminalSend.template",
+      ""
+    );
+
+  function wrapTemplate(text: string) {
+    const template = vscode.workspace
+      .getConfiguration()
+      .get("terminalSend.template") as string;
+    if (!template) return text;
+    return template.replace("{}", text);
+  }
 
   let sendCommandDisposable = vscode.commands.registerCommand(
     "terminalSend.sendSelection",
@@ -54,8 +69,6 @@ export function activate(context: vscode.ExtensionContext) {
         editor.selection = selection;
       }
 
-      console.log(editorToTerminal.get(editor));
-
       const terminal =
         editorToTerminal.get(editor) 
         ?? vscode.window.activeTerminal
@@ -68,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       editorToTerminal.set(editor, terminal);
 
-      terminal.sendText(dedent(text), true);
+      terminal.sendText(wrapTemplate(dedent(text)), true);
       terminal.show();
       setTimeout(() => {
         if (editor) {
@@ -103,6 +116,26 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  let configureTemplateDisposable = vscode.commands.registerCommand(
+    "terminalSend.configureTemplate",
+    async () => {
+      const template = await vscode.window.showInputBox({
+        placeHolder: "Enter template, using {} as placeholder for selected text",
+        value: vscode.workspace
+          .getConfiguration()
+          .get("terminalSend.template"),
+      });
+      if (typeof template === "string") {
+        vscode.workspace
+          .getConfiguration()
+          .update(
+            "terminalSend.template",
+            template,
+          );
+      }
+    }
+  );
+
   const terminalCloseHook = vscode.window.onDidCloseTerminal((terminal) => {
     for (let [editor, term] of editorToTerminal.map) {
       if (term === terminal) {
@@ -116,7 +149,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     sendCommandDisposable,
     setEditorDisposable,
-    terminalCloseHook
+    terminalCloseHook,
+    configureTemplateDisposable,
   );
 }
 
